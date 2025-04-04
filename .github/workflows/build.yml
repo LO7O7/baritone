@@ -1,0 +1,35 @@
+name: Build Baritone
+
+on:
+  push:
+    branches: [ "1.21.4" ]
+  pull_request:
+    branches: [ "1.21.4" ]
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: 17
+
+    - name: Grant permission to gradlew
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: baritone-jar
+        path: build/libs/*.jar

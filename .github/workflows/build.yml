@@ -5,31 +5,30 @@ on:
     branches: [ "1.21.4" ]
   pull_request:
     branches: [ "1.21.4" ]
-  workflow_dispatch: # Allows manual triggering
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up JDK
+    - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: 17
 
-    - name: Grant permission to gradlew
-      run: chmod +x gradlew
+    - name: Make Gradle executable
+      run: chmod +x ./gradlew
 
-    - name: Build with Gradle
+    - name: Build project
       run: ./gradlew build
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
+    - name: Upload built artifact
+      uses: actions/upload-artifact@v4
       with:
         name: baritone-jar
         path: build/libs/*.jar
